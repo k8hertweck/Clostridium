@@ -31,7 +31,7 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 			$DATA/raw/"$x"_R1_001.fastq.gz $DATA/raw/"$x"_R2_001.fastq.gz \
 			$DATA/trim/"$x"_1paired.fq.gz $DATA/trim/"$x"_1unpaired.fq.gz \
 			$DATA/trim/"$x"_2paired.fq.gz $DATA/trim/"$x"_2unpaired.fq.gz \
-			ILLUMINACLIP:$TRIM/adapters/TruSeq3-PE.fa:2:30:10 SLIDINGWINDOW:4:20 LEADING:15 TRAILING:15  MINLEN:50
+			ILLUMINACLIP:$TRIM/adapters/TruSeq3-PE.fa:2:30:10 SLIDINGWINDOW:4:20 LEADING:15 TRAILING:15 HEADCROP:10 MINLEN:50
 done
 
 # make list of strains
