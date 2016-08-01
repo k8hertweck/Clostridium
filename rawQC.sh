@@ -20,10 +20,10 @@ mv *zip *html *gz raw
 
 ## quality trimming and filtering
 # make list of files
-ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/ClostridiumStrains.lst
+ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/ClostridiumFiles.lst
 # set up directory
 mkdir trim
-# loop across all strains
+# loop trimmomatic across all strains
 for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 	do
 		# quality trimming 
@@ -34,6 +34,15 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 			ILLUMINACLIP:$TRIM/adapters/TruSeq3-PE.fa:2:30:10 SLIDINGWINDOW:4:20 LEADING:15 TRAILING:15  MINLEN:50
 done
 
+# make list of strains
+sed s/_S._L00[1234]// $SCRIPTS/ClostridiumFiles.lst > $SCRIPTS/ClostridiumStrains.lst
+# concatenate data from each strain
+for x in `cat $SCRIPTS/ClostridiumStrains.lst`
+	do
+		cat "$x"*1paired.fq.gz > "$x"_R1.fq.gz
+		cat "$x"*2paired.fq.gz > "$x"_R2.fq.gz
+done
+
 # reassess trimmed files
 cd trim
-fastqc *_1paired.fq.gz *_2paired.fq.gz
+fastqc *_R1.fq.gz *_R2.fq.gz
