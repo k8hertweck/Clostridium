@@ -23,6 +23,7 @@ cd $CLOS
 for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 	do
 		# concatenate read files
+		echo $x
 		zcat trim/$x_L00*_1paired.fq.gz > trim/$x_R1.fq.gz
 		zcat trim/$x_L00*_2paired.fq.gz > trim/$x_R2.fq.gz
 		# assemble genome
