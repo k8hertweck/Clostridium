@@ -24,7 +24,7 @@ ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/Clost
 # set up directory
 mkdir trim
 # loop trimmomatic across all strains
-for x in `cat $SCRIPTS/ClostridiumStrains.lst`
+for x in `cat $SCRIPTS/ClostridiumFiles.lst`
 	do
 		# quality trimming 
 		java -jar $TRIM/trimmomatic-0.36.jar PE -threads 4 -phred33 \

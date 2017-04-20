@@ -9,9 +9,10 @@
 CLOS=$1
 SCRIPTS=`pwd`
 
-cd $CLOS
-
 # create list of strains
+sed s/_L00[1-5]// ClostridiumFiles.lst | uniq > ClostridiumStrains.lst
+
+cd $CLOS
 
 # velvet optimizer
 
