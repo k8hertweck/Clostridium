@@ -5,7 +5,6 @@
 ## dependencies
 #	VelvetOptimizer: specify path (https://github.com/tseemann/VelvetOptimiser)
 #	Velvet: installed
-# 	whole-genome alignment method? 
 
 CLOS=$1
 SCRIPTS=`pwd`
@@ -30,5 +29,3 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 		velveth $x.31 31 -shortPaired -fastq -separate trim/$x_R1.fq.gz trim/$x_R2.fq.gz
 		velvetg $x.31 -cov_cutoff auto -exp_cov auto
 done
-
-# align contigs with progressiveMauve, MUMmer
