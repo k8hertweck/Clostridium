@@ -2,18 +2,23 @@
 
 ## quality control of raw sequence data prior to assembly 
 ## usage:
-#	rawQC.sh PATH/TO/DATA
+#	rawQC.sh PATH/TO/PROJECT
+# 	PATH/TO/PROJECT is location of directory containing all fastq.gz files
+# 	set TRIM to wherever Trimmomatic is installed
 ## dependencies:
-#	fastqc
-#	trimmomatic
+#	fastqc (v0.11.3): quality control 
+#		(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), installed and in path
+#	trimmomatic (version 0.36): quality filtering and trimming
+#		(http://www.usadellab.org/cms/?page=trimmomatic)
 
 TRIM=/Applications/Trimmomatic-0.36
-DATA=$1
+PROJECT=$1
 SCRIPTS=`pwd`
 
-cd $DATA
+cd $PROJECT
 
 ## QC of raw files
+echo "FASTQC ON RAW FILES"
 fastqc *.fastq.gz
 mkdir raw
 mv *zip *html *gz raw
@@ -21,12 +26,16 @@ mv *zip *html *gz raw
 ## quality trimming and filtering
 # make list of files
 ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/ClostridiumFiles.lst
+# make list of strains
+sed s/_S._L00[1234]// $SCRIPTS/ClostridiumFiles.lst > $SCRIPTS/ClostridiumStrains.lst
 # set up directory
 mkdir trim
 # loop trimmomatic across all strains
+echo "QUALITY TRIMMING"
 for x in `cat $SCRIPTS/ClostridiumFiles.lst`
 	do
 		# quality trimming 
+		echo $x
 		java -jar $TRIM/trimmomatic-0.36.jar PE -threads 4 -phred33 \
 			$DATA/raw/"$x"_R1_001.fastq.gz $DATA/raw/"$x"_R2_001.fastq.gz \
 			$DATA/trim/"$x"_1paired.fq.gz $DATA/trim/"$x"_1unpaired.fq.gz \
@@ -35,15 +44,17 @@ for x in `cat $SCRIPTS/ClostridiumFiles.lst`
 			SLIDINGWINDOW:4:15 LEADING:3 TRAILING:3  HEADCROP:8 MINLEN:50
 done
 
-# make list of strains
-sed s/_S._L00[1234]// $SCRIPTS/ClostridiumFiles.lst > $SCRIPTS/ClostridiumStrains.lst
-# concatenate data from each strain
-for x in `cat $SCRIPTS/ClostridiumStrains.lst`
-	do
-		cat "$x"*1paired.fq.gz > "$x"_R1.fq.gz
-		cat "$x"*2paired.fq.gz > "$x"_R2.fq.gz
-done
-
 # reassess trimmed files
 cd trim
-fastqc *_R1.fq.gz *_R2.fq.gz
+echo "FASTQC ON TRIMMED FILES"
+fastqc *_1paired.fq.gz *_2paired.fq.gz
+
+# concatenate read files
+mkdir combined
+echo "CONCATENATING TRIMMED FILES"
+for x in `cat $SCRIPTS/ClostridiumStrains.lst`
+	do
+		echo $x
+		cat trim/$x_L00*_1paired.fq.gz > combined/$x_R1.fq.gz
+		cat trim/$x_L00*_2paired.fq.gz > combined/$x_R2.fq.gz
+done
