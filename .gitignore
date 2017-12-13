@@ -3,4 +3,6 @@
 .RData
 .Ruserdata
 references/*.fas.*
+mapping/
+results/
 
