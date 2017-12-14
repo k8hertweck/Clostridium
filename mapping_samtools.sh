@@ -23,8 +23,9 @@ echo "INDEXING REFERENCE"
 bwa index Cace-ATCC824-chrom.fas
 samtools faidx Cace-ATCC824-chrom.fas
 
-## read mapping
 cd $PROJECT
+
+## read mapping
 mkdir mapping results
 # map reads to reference: find locations in known genome where reads match
 echo "MAPPING READS"
@@ -35,6 +36,9 @@ samtools view -bS mapping/Cace-3003_S5_ATCC824.sam | samtools sort > mapping/Cac
 # print simple summary statistics for read mapping
 echo "SUMMARIZE READ MAPPING"
 samtools flagstat mapping/Cace-3003_S5_ATCC824.sorted.bam > results/Cace-3003_S5_ATCC824.summary.txt
+# index bam file
+echo "INDEXING BAM FILE"
+samtools index mapping/Cace-3003_S5_ATCC824.sorted.bam
 # add average depth of coverage to summary file
 echo "CALCULATING DEPTH OF COVERAGE"
 samtools depth mapping/Cace-3003_S5_ATCC824.sorted.bam | awk '{sum+=$3} END { print "Average coverage= ",sum/NR}' >> results/Cace-3003_S5_ATCC824.summary.txt
