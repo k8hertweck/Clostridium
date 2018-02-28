@@ -23,6 +23,6 @@ cd $PROJECT
 for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 	do
 		# assemble genome
-		velveth $x.31 31 -shortPaired -fastq -separate combined/$x_R1.fq.gz combined/$x_R2.fq.gz
+		velveth $x.31 31 -shortPaired -fastq -separate combined/"$x"_R1.fq.gz combined/"$x"_R2.fq.gz
 		velvetg $x.31 -cov_cutoff auto -exp_cov auto
 done
