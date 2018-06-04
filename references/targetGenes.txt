@@ -1,0 +1,4 @@
+adhe1 (add?) bifunctional acetaldehyde-CoA/alcohol dehydrogenase
+ctfA butyrate-acetoacetate COA-transferase subunit A
+ctfB butyrate-acetoacetate COA-transferase subunit B
+adc acetoacetate decarboxylase

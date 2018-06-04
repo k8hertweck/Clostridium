@@ -13,8 +13,7 @@
 PROJECT=$1
 SCRIPTS=`pwd`
 
-cd $PROJECT
-mkdir mapping
+cd $SCRIPTS
 
 ## index reference genome
 # bwa and samtools require the index to be referenced to perform comparisons with reads
