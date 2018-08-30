@@ -1,12 +1,12 @@
 #!/bin/bash
 
-## quality control of raw sequence data prior to assembly 
+## quality control of raw sequence data prior to assembly
 ## usage:
 #	rawQC.sh PATH/TO/PROJECT
 # 	PATH/TO/PROJECT is location of directory containing all fastq.gz files
 # 	set TRIM to wherever Trimmomatic is installed
 ## dependencies:
-#	fastqc (v0.11.3): quality control 
+#	fastqc (v0.11.7): quality control 
 #		(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), installed and in path
 #	trimmomatic (version 0.38): quality filtering and trimming
 #		(http://www.usadellab.org/cms/?page=trimmomatic)
@@ -34,7 +34,7 @@ mkdir trim
 echo "QUALITY TRIMMING"
 for x in `cat $SCRIPTS/ClostridiumFiles.lst`
 	do
-		# quality trimming 
+		# quality trimming
 		echo $x
 		java -jar $TRIM/trimmomatic-0.36.jar PE -threads 4 -phred33 \
 			$DATA/raw/"$x"_R1_001.fastq.gz $DATA/raw/"$x"_R2_001.fastq.gz \
