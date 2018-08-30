@@ -8,10 +8,10 @@
 ## dependencies:
 #	fastqc (v0.11.3): quality control 
 #		(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), installed and in path
-#	trimmomatic (version 0.36): quality filtering and trimming
+#	trimmomatic (version 0.38): quality filtering and trimming
 #		(http://www.usadellab.org/cms/?page=trimmomatic)
 
-TRIM=/Applications/Trimmomatic-0.36
+TRIM=/Applications/Trimmomatic-0.38
 PROJECT=$1
 SCRIPTS=`pwd`
 
