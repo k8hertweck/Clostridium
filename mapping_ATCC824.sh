@@ -19,8 +19,8 @@ cd $SCRIPTS
 # bwa and samtools require the index to be referenced to perform comparisons with reads
 cd references
 echo "INDEXING REFERENCE"
-bwa index Cace-ATCC824-chrom.fas
-samtools faidx Cace-ATCC824-chrom.fas
+bwa index Cace-ATCC824-both.fas
+samtools faidx Cace-ATCC824-both.fas
 
 cd $PROJECT
 
@@ -28,7 +28,7 @@ cd $PROJECT
 mkdir mapping results
 # map reads to reference: find locations in known genome where reads match
 echo "MAPPING READS"
-bwa mem -t 2 $SCRIPTS/references/Cace-ATCC824-chrom.fas combined/Cace-3003_S5_R1.fq.gz combined/Cace-3003_S5_R2.fq.gz > mapping/Cace-3003_S5_ATCC824.sam
+bwa mem -t 2 $SCRIPTS/references/Cace-ATCC824-both.fas combined/Cace-3003_S5_R1.fq.gz combined/Cace-3003_S5_R2.fq.gz > mapping/Cace-3003_S5_ATCC824.sam
 # convert sam to sorted bam format
 echo "CONVERTING SAM TO BAM"
 samtools view -bS mapping/Cace-3003_S5_ATCC824.sam | samtools sort > mapping/Cace-3003_S5_ATCC824.sorted.bam
@@ -45,7 +45,7 @@ samtools depth mapping/Cace-3003_S5_ATCC824.sorted.bam | awk '{sum+=$3} END { pr
 ## variant calling
 # find SNPs in reads relative to reference
 echo "CALLING VARIANTS"
-samtools mpileup -ugf $SCRIPTS/references/Cace-ATCC824-chrom.fas mapping/Cace-3003_S5_ATCC824.sorted.bam > mapping/Cace-3003_S5_ATCC824.raw.bcf
+samtools mpileup -ugf $SCRIPTS/references/Cace-ATCC824-both.fas mapping/Cace-3003_S5_ATCC824.sorted.bam > mapping/Cace-3003_S5_ATCC824.raw.bcf
 # filter SNPs and keep only those with substantial data
 echo "FILTERING SNPS"
 bcftools view mapping/Cace-3003_S5_ATCC824.raw.bcf | vcfutils.pl varFilter -D100 > results/Cace-3003_S5_ATCC824.flt.vcf
