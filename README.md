@@ -8,4 +8,5 @@ Scripts:
 * `variant_calling.sh`: identifying variants (haploid and diploid)
 * `identify_filters.sh`: identifying genomes to mask for quality control
 * `variant_filtering.sh`: masking portions of genome to identify final sets of SNPs and indels
+* `annotation.sh`: identifying function and effects of variants
 * `assembly.sh`: selection of kmer value with VelvetOptimizer, genome assembly with Velvet
