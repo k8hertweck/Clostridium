@@ -1,11 +1,22 @@
 #!/bin/bash
 
+#SBATCH -J read_mapping	# Job name
+#SBATCH -o read_mapping.%j.out	# Name of stdout output file (%j expands to jobId)
+#SBATCH -p normal	# Queue name
+#SBATCH -n 16	# Total number of  tasks requested
+#SBATCH -t 48:00:00	# Run time (hh:mm:ss)
+#SBATCH --mail-user k8hertweck@gmail.com	# email to notify
+#SBATCH --mail-type=ALL	# when to notify email
+#SBATCH -A Clostridium-genomics	# Allocation name to charge job against
+
 ## read mapping of Clostridium strains
 ## usage: read_mapping.sh PATH/TO/PROJECT
 ## dependencies
 # 	bwa (v0.7.12-r1039): http://bio-bwa.sourceforge.net
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
 #   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
+
+module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0
 
 PROJECT=$1
 SCRIPTS=`pwd`
