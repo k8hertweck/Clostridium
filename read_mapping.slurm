@@ -3,7 +3,8 @@
 #SBATCH -J read_mapping	# Job name
 #SBATCH -o read_mapping.%j.out	# Name of stdout output file (%j expands to jobId)
 #SBATCH -p normal	# Queue name
-#SBATCH -n 16	# Total number of  tasks requested
+#SBATCH -N 1	# Total number of nodes requested
+#SBATCH -n 16 	# Total number of tasks requested
 #SBATCH -t 48:00:00	# Run time (hh:mm:ss)
 #SBATCH --mail-user k8hertweck@gmail.com	# email to notify
 #SBATCH --mail-type=ALL	# when to notify email
@@ -44,27 +45,19 @@ bwa sampe $SCRIPTS/references/Cace-ATCC824-both.fas \
   aln/Cace-3003_S5_R1.sai aln/Cace-3003_S5_R2.sai \
   combined/Cace-3003_S5_R1.fq.gz \
   combined/Cace-3003_S5_R2.fq.gz | \
-  samtools view -S -b - > sampe/Cace-3003_S5-pe.bam
+  samtools view -S -b - | \
+  samtools sort - > sampe/Cace-3003_S5-pe.bam
 # identify duplicates
-java jvm-args -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   MarkDuplicates \
+  VALIDATION_STRINGENCY=LENIENT \
   I=sampe/Cace-3003_S5-pe.bam \
   O=dup/Cace-3003_S5_dup.bam \
   M=dup/Cace-3003_S5_dup_metrics.txt
 # remove pairs with at least one read marked as duplicate
-java jvm-args -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   FixMateInformation \
+  VALIDATION_STRINGENCY=LENIENT \
   I=dup/Cace-3003_S5_dup.bam \
   O=fixmate/Cace-3003_S5_fixmate.bam
-# realign reads to minimize SNPs in indel regions
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
-  -T RealignerTargetCreator \
-  $SCRIPTS/references/Cace-ATCC824-both.fas \
-  -I fixmate/Cace-3003_S5_fixmate.bam \
-  -o realign/Cace-3003_S5.intervals
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
-  -T IndelRealigner \
-  $SCRIPTS/references/Cace-ATCC824-both.fas \
-  -I fixmate/Cace-3003_S5_fixmate.bam \
-  -targetIntervals realign/Cace-3003_S5.intervals \
-  -o realign/Cace-3003_S5_realign.bam
+
