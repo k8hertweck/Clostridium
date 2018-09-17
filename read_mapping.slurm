@@ -32,32 +32,35 @@ bwa index Cace-ATCC824-both.fas
 
 ## read mapping
 cd $PROJECT
-mkdir aln sampe dup fixmate realign
+mkdir aln sampe dup fixmate
 # map reads to reference
 echo "MAPPING READS"
-# find suffix array (SA) coordinates
-bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
-  combined/Cace-3003_S5_R1.fq.gz > aln/Cace-3003_S5_R1.sai
-bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
-  combined/Cace-3003_S5_R2.fq.gz > aln/Cace-3003_S5_R2.sai
-# generate alignments for paired end reads in SAM format
-bwa sampe $SCRIPTS/references/Cace-ATCC824-both.fas \
-  aln/Cace-3003_S5_R1.sai aln/Cace-3003_S5_R2.sai \
-  combined/Cace-3003_S5_R1.fq.gz \
-  combined/Cace-3003_S5_R2.fq.gz | \
-  samtools view -S -b - | \
-  samtools sort - > sampe/Cace-3003_S5-pe.bam
-# identify duplicates
-java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
-  MarkDuplicates \
-  VALIDATION_STRINGENCY=LENIENT \
-  I=sampe/Cace-3003_S5-pe.bam \
-  O=dup/Cace-3003_S5_dup.bam \
-  M=dup/Cace-3003_S5_dup_metrics.txt
-# remove pairs with at least one read marked as duplicate
-java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
-  FixMateInformation \
-  VALIDATION_STRINGENCY=LENIENT \
-  I=dup/Cace-3003_S5_dup.bam \
-  O=fixmate/Cace-3003_S5_fixmate.bam
-
+# read mapping and duplicate removal for each sample
+for x in `cat $SCRIPTS/CLostridiumStrains.lst`
+  do
+    # find suffix array (SA) coordinates
+    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
+      combined/"$x"_R1.fq.gz > aln/"$x"_R1.sai
+    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
+      combined/"$x"_R2.fq.gz > aln/"$x"_R2.sai
+    # generate alignments for paired end reads in SAM format
+    bwa sampe $SCRIPTS/references/Cace-ATCC824-both.fas \
+      aln/"$x"_R1.sai aln/"$x"_R2.sai \
+      combined/"$x"_R1.fq.gz \
+      combined/"$x"_R2.fq.gz | \
+      samtools view -S -b - | \
+      samtools sort - > sampe/"$x"-pe.bam
+    # identify duplicates
+    java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+      MarkDuplicates \
+      VALIDATION_STRINGENCY=LENIENT \
+      I=sampe/"$x"-pe.bam \
+      O=dup/"$x"_dup.bam \
+      M=dup/"$x"_dup_metrics.txt
+    # remove pairs with at least one read marked as duplicate
+    java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+      FixMateInformation \
+      VALIDATION_STRINGENCY=LENIENT \
+      I=dup/"$x"_dup.bam \
+      O=fixmate/"$x"_fixmate.bam
+  done
