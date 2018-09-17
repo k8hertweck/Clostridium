@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## variant calling for Clostridium strains 
+## variant calling for Clostridium strains
 ## usage: variant_calling.sh PATH/TO/PROJECT
 ## dependencies
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
@@ -9,8 +9,6 @@
 ## pre-process reads
 # combine strain data
 MergeSamFiles (picard)
-# realign reads
-RealignerTargetCreator/IndelRealigner (gatk)
 # filter out reads with zero mapping quality and low base quality
 gatk
 
