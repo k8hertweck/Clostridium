@@ -36,7 +36,7 @@ mkdir aln sampe dup fixmate
 # map reads to reference
 echo "MAPPING READS"
 # read mapping and duplicate removal for each sample
-for x in `cat $SCRIPTS/CLostridiumStrains.lst`
+for x in `cat $SCRIPTS/ClostridiumStrains.lst`
   do
     # find suffix array (SA) coordinates
     bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
