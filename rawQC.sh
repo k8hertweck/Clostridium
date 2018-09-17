@@ -1,26 +1,37 @@
 #!/bin/bash
 
+#SBATCH -J rawQC	# Job name
+#SBATCH -o rawQC.%j.out	# Name of stdout output file (%j expands to jobId)
+#SBATCH -p normal	# Queue name
+#SBATCH -N 1	# Total number of nodes requested
+#SBATCH -n 16 	# Total number of tasks requested
+#SBATCH -t 48:00:00	# Run time (hh:mm:ss)
+#SBATCH --mail-user k8hertweck@gmail.com	# email to notify
+#SBATCH --mail-type=ALL	# when to notify email
+#SBATCH -A Clostridium-genomics	# Allocation name to charge job against
+
 ## quality control of raw sequence data prior to assembly
 ## usage:
 #	rawQC.sh PATH/TO/PROJECT
 # 	PATH/TO/PROJECT is location of directory containing all fastq.gz files
 # 	set TRIM to wherever Trimmomatic is installed
 ## dependencies:
-#	fastqc (v0.11.7): quality control
+#	fastqc (v0.11.5): quality control
 #		(https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), installed and in path
 #	trimmomatic (version 0.38): quality filtering and trimming
 #		(http://www.usadellab.org/cms/?page=trimmomatic)
 
+module load fastqc/0.11.5
+
 PROJECT=$1
-FASTQC=/Applications/FastQC-0.11.7/fastqc
-TRIM=/Applications/Trimmomatic-0.38
 SCRIPTS=`pwd`
+TRIM=$WORK/myapps/Trimmomatic-0.38
 
 cd $PROJECT
 
 ## QC of raw files
 echo "FASTQC ON RAW FILES"
-#$FASTQC *.fastq.gz
+fastqc *.fastq.gz
 mkdir raw
 mv *zip *html *gz raw
 
@@ -48,7 +59,7 @@ done
 # reassess trimmed files
 cd trim
 echo "FASTQC ON TRIMMED FILES"
-#$FASTQC *_1paired.fq.gz *_2paired.fq.gz
+fastqc *_1paired.fq.gz *_2paired.fq.gz
 
 # concatenate read files
 mkdir combined
