@@ -24,6 +24,14 @@ SCRIPTS=`pwd`
 cd $PROJECT/
 mkdir variants
 
+# prepare reference files
+cd references
+java -jar $TACC_PICARD_DIR/CreateSequenceDictionary.jar \
+  R=Cace-ATCC824-both.fas \
+  O=Cace-ATCC824-both.dict
+samtools faidx 
+cd $PROJECT Cace-ATCC824-both.fas
+
 # multi-sample variant calling, haploid
 java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   -T HaplotypeCaller \
