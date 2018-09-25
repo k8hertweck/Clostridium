@@ -25,7 +25,7 @@ cd $PROJECT/
 mkdir variants
 
 # multi-sample variant calling, haploid
-java -jar GenomeAnalysisTK.jar \
+java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   -T HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fas \
   -I fixmate/Cace-3003_S5_fixmate.bam \
@@ -42,7 +42,7 @@ java -jar GenomeAnalysisTK.jar \
   -mmq 15 \
   -ploidy 1
   # multi-sample variant calling, diploid (for false-positive filtering)
-java -jar GenomeAnalysisTK.jar \
+java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   -T HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fas \
   -I fixmate/Cace-3003_S5_fixmate.bam \
