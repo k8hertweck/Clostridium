@@ -1,0 +1,28 @@
+PROJECT=$1
+SCRIPTS=`pwd`
+GATK=$WORK/myapps/gatk-4.0.9.0
+
+module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
+
+#MAPQ should be 0 for unmapped read.
+
+java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+  ValidateSamFile \
+  I=fixmate/Cace-3003_S5_fixmate.bam
+
+java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+  AddOrReplaceReadGroups \
+  I=fixmate/Cace-3003_S5_fixmate.bam \
+  O=fixmate/Cace-3003_S5_groups.bam \
+  RGLB=lib1 \
+  RGPL=illumina \
+  RGPU=unit1 \
+  RGSM=20
+
+$GATK/gatk \
+  HaplotypeCaller \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+  -I fixmate/Cace-3003_S5_groups.bam \
+  -O variants/Cace-variants.bam \
+  -mbq 15 \
+  -ploidy 1
