@@ -16,13 +16,12 @@
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
 #   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
 
-module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
+module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
 
 PROJECT=$1
 SCRIPTS=`pwd`
-GATK=$WORK/myapps/gatk-4.0.9.0
-
-cd $SCRIPTS
+GATK=$HOME/bin/gatk/
+cd $PROJECT
 mkdir variants
 
 # prepare reference files
@@ -32,39 +31,43 @@ java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   R=Cace-ATCC824-both.fasta \
   O=Cace-ATCC824-both.dict
 samtools faidx Cace-ATCC824-both.fas
-
-cd $PROJECT
+for x in `cat $SCRIPTS/ClostridiumStrains.lst`
+  do
+    samtools index groups/"$x"_groups.bam
+  done
 
 # multi-sample variant calling, haploid
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
+java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -I fixmate/Cace-3003_S5_fixmate.bam \
-  -I fixmate/Cace-463_S1_fixmate.bam \
-  -I fixmate/Cace-7960_S6_fixmate.bam \
-  -I fixmate/Cace-7966_S7_fixmate.bam \
-  -I fixmate/Cace-7971_S8_fixmate.bam \
-  -I fixmate/Cace-7979_S9_fixmate.bam \
-  -I fixmate/Cace-7984_S10_fixmate.bam \
-  -I fixmate/Cace-8002_S11_fixmate.bam \
-  -I fixmate/Cace-8005_S12_fixmate.bam \
-  -I fixmate/Cace-824_S3_fixmate.bam \
-  -O variants/Cace-variants.bam \
+  -I groups/Cace-3003_S5_groups.bam \
+  -I groups/Cace-463_S1_groups.bam \
+  -I groups/Cace-7960_S6_groups.bam \
+  -I groups/Cace-7966_S7_groups.bam \
+  -I groups/Cace-7971_S8_groups.bam \
+  -I groups/Cace-7979_S9_groups.bam \
+  -I groups/Cace-7984_S10_groups.bam \
+  -I groups/Cace-8002_S11_groups.bam \
+  -I groups/Cace-8005_S12_groups.bam \
+  -I groups/Cace-824_S3_groups.bam \
+  -O variants/Cace-variants_haploid.vcf.gz \
+  -bamout variants/Cace-variants_haploid.bam \
   -mbq 15 \
   -ploidy 1
   # multi-sample variant calling, diploid (for false-positive filtering)
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
+java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -I fixmate/Cace-3003_S5_fixmate.bam \
-  -I fixmate/Cace-463_S1_fixmate.bam \
-  -I fixmate/Cace-7960_S6_fixmate.bam \
-  -I fixmate/Cace-7966_S7_fixmate.bam \
-  -I fixmate/Cace-7971_S8_fixmate.bam \
-  -I fixmate/Cace-7979_S9_fixmate.bam \
-  -I fixmate/Cace-7984_S10_fixmate.bam \
-  -I fixmate/Cace-8002_S11_fixmate.bam \
-  -I fixmate/Cace-8005_S12_fixmate.bam \
-  -I fixmate/Cace-824_S3_fixmate.bam \
-  -O variants/Cace-variants_diploid.bam \
+  -I groups/Cace-3003_S5_groups.bam \
+  -I groups/Cace-463_S1_groups.bam \
+  -I groups/Cace-7960_S6_groups.bam \
+  -I groups/Cace-7966_S7_groups.bam \
+  -I groups/Cace-7971_S8_groups.bam \
+  -I groups/Cace-7979_S9_groups.bam \
+  -I groups/Cace-7984_S10_groups.bam \
+  -I groups/Cace-8002_S11_groups.bam \
+  -I groups/Cace-8005_S12_groups.bam \
+  -I groups/Cace-824_S3_groups.bam \
+  -O variants/Cace-variants_diploid.vcf.gz \
+  -bamout variants/Cace-variants_diploid.bam \
   -mbq 15
