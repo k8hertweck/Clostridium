@@ -20,22 +20,24 @@ module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
 
 PROJECT=$1
 SCRIPTS=`pwd`
+GATK=$WORK/myapps/gatk-4.0.9.0
 
-cd $PROJECT/
-mkdir variants
+cd $SCRIPTS
 
 # prepare reference files
 cd references
 java -jar $TACC_PICARD_DIR/CreateSequenceDictionary.jar \
-  R=Cace-ATCC824-both.fas \
+  R=Cace-ATCC824-both.fasta \
   O=Cace-ATCC824-both.dict
-samtools faidx 
-cd $PROJECT Cace-ATCC824-both.fas
+samtools faidx Cace-ATCC824-both.fasta
+
+cd $PROJECT
+mkdir variants
 
 # multi-sample variant calling, haploid
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
-  -T HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fas \
+$GATK/gatk \
+  HaplotypeCaller \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
   -I fixmate/Cace-3003_S5_fixmate.bam \
   -I fixmate/Cace-463_S1_fixmate.bam \
   -I fixmate/Cace-7960_S6_fixmate.bam \
@@ -46,13 +48,13 @@ java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   -I fixmate/Cace-8002_S11_fixmate.bam \
   -I fixmate/Cace-8005_S12_fixmate.bam \
   -I fixmate/Cace-824_S3_fixmate.bam \
-  -o variants/Cace-variants.bam \
-  -mmq 15 \
+  -O variants/Cace-variants.bam \
+  -mbq 15 \
   -ploidy 1
   # multi-sample variant calling, diploid (for false-positive filtering)
-java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
-  -T HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fas \
+$GATK/gatk \
+  HaplotypeCaller \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
   -I fixmate/Cace-3003_S5_fixmate.bam \
   -I fixmate/Cace-463_S1_fixmate.bam \
   -I fixmate/Cace-7960_S6_fixmate.bam \
@@ -63,5 +65,5 @@ java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   -I fixmate/Cace-8002_S11_fixmate.bam \
   -I fixmate/Cace-8005_S12_fixmate.bam \
   -I fixmate/Cace-824_S3_fixmate.bam \
-  -o variants/Cace-variants_diploid.bam \
-  -mmq 15
+  -O variants/Cace-variants_diploid.bam \
+  -mbq 15
