@@ -32,7 +32,7 @@ bwa index Cace-ATCC824-both.fas
 
 ## read mapping
 cd $PROJECT
-mkdir aln sampe dup fixmate
+mkdir aln sampe dup fixmate groups
 # map reads to reference
 echo "MAPPING READS"
 # read mapping and duplicate removal for each sample
@@ -63,4 +63,18 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
       VALIDATION_STRINGENCY=LENIENT \
       I=dup/"$x"_dup.bam \
       O=fixmate/"$x"_fixmate.bam
+    # validate file
+    #java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+    #    ValidateSamFile \
+    #    I=fixmate/"$x"_fixmate.bam
+    # resolve groups
+    java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
+      AddOrReplaceReadGroups \
+      VALIDATION_STRINGENCY=LENIENT \
+      I=fixmate/"$x"_fixmate.bam \
+      O=groups/"$x"_groups.bam \
+      RGLB=lib1 \
+      RGPL=illumina \
+      RGPU=unit1 \
+      RGSM=20
   done
