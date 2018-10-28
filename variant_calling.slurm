@@ -10,13 +10,13 @@
 #SBATCH --mail-type=ALL	# when to notify email
 #SBATCH -A Clostridium-genomics	# Allocation name to charge job against
 
-module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
-
 ## variant calling for Clostridium strains
 ## usage: variant_calling.sh PATH/TO/PROJECT
 ## dependencies
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
 #   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
+
+module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
 
 PROJECT=$1
 SCRIPTS=`pwd`
@@ -29,7 +29,7 @@ cd references
 java -jar $TACC_PICARD_DIR/CreateSequenceDictionary.jar \
   R=Cace-ATCC824-both.fas \
   O=Cace-ATCC824-both.dict
-samtools faidx 
+samtools faidx
 cd $PROJECT Cace-ATCC824-both.fas
 
 # multi-sample variant calling, haploid
