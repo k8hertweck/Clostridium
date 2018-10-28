@@ -36,7 +36,7 @@ samtools faidx Cace-ATCC824-both.fas
 cd $PROJECT
 
 # multi-sample variant calling, haploid
-$GATK/gatk \
+java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
   -I fixmate/Cace-3003_S5_fixmate.bam \
@@ -53,7 +53,7 @@ $GATK/gatk \
   -mbq 15 \
   -ploidy 1
   # multi-sample variant calling, diploid (for false-positive filtering)
-$GATK/gatk \
+java -jar $TACC_GATK_DIR/GenomeAnalysisTK.jar \
   HaplotypeCaller \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
   -I fixmate/Cace-3003_S5_fixmate.bam \
