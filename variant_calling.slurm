@@ -11,10 +11,10 @@
 #SBATCH -A Clostridium-genomics	# Allocation name to charge job against
 
 ## variant calling for Clostridium strains
-## usage: variant_calling.sh PATH/TO/PROJECT
+## usage: sbatch variant_calling.slurm PATH/TO/PROJECT
 ## dependencies
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
-#   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
+#   GATK (v4.0.8.1): https://software.broadinstitute.org/gatk/
 
 module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
 
