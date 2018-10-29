@@ -21,8 +21,8 @@ module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
 PROJECT=$1
 SCRIPTS=`pwd`
 GATK=$HOME/bin/gatk/
-cd $PROJECT
-mkdir variants
+
+cd $SCRIPTS
 
 # prepare reference files
 cd references
@@ -31,10 +31,14 @@ java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   R=Cace-ATCC824-both.fasta \
   O=Cace-ATCC824-both.dict
 samtools faidx Cace-ATCC824-both.fas
+cd $PROJECT
 for x in `cat $SCRIPTS/ClostridiumStrains.lst`
   do
     samtools index groups/"$x"_groups.bam
   done
+
+cd $PROJECT
+mkdir variants
 
 # multi-sample variant calling, haploid
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
