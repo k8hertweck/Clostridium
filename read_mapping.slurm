@@ -15,10 +15,9 @@
 ## dependencies
 # 	bwa (v0.7.16a): http://bio-bwa.sourceforge.net
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
-#   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
 #   samtools (v1.5): http://www.htslib.org
 
-module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 gatk/3.8.0 samtools/1.5
+module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
 
 PROJECT=$1
 SCRIPTS=`pwd`
