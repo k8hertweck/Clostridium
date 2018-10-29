@@ -28,7 +28,7 @@ cd $SCRIPTS
 cd references
 java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   CreateSequenceDictionary \
-  R=Cace-ATCC824-both.fasta \
+  R=Cace-ATCC824-both.fas \
   O=Cace-ATCC824-both.dict
 samtools faidx Cace-ATCC824-both.fasta
 cd $PROJECT
@@ -43,7 +43,7 @@ mkdir variants
 # multi-sample variant calling, haploid
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fas \
   -I groups/Cace-3003_S5_groups.bam \
   -I groups/Cace-463_S1_groups.bam \
   -I groups/Cace-7960_S6_groups.bam \
@@ -61,7 +61,7 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   # multi-sample variant calling, diploid (for false-positive filtering)
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fas \
   -I groups/Cace-3003_S5_groups.bam \
   -I groups/Cace-463_S1_groups.bam \
   -I groups/Cace-7960_S6_groups.bam \
