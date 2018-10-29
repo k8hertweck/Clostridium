@@ -28,7 +28,7 @@ cd $SCRIPTS
 ## index reference genome
 cd references
 echo "INDEXING REFERENCE"
-bwa index Cace-ATCC824-both.fas
+bwa index Cace-ATCC824-both.fasta
 
 ## read mapping
 cd $PROJECT
@@ -39,12 +39,12 @@ echo "MAPPING READS"
 for x in `cat $SCRIPTS/ClostridiumStrains.lst`
   do
     # find suffix array (SA) coordinates
-    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
+    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fasta \
       combined/"$x"_R1.fq.gz > aln/"$x"_R1.sai
-    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fas \
+    bwa aln -t 16 $SCRIPTS/references/Cace-ATCC824-both.fasta \
       combined/"$x"_R2.fq.gz > aln/"$x"_R2.sai
     # generate alignments for paired end reads in SAM format
-    bwa sampe $SCRIPTS/references/Cace-ATCC824-both.fas \
+    bwa sampe $SCRIPTS/references/Cace-ATCC824-both.fasta \
       aln/"$x"_R1.sai aln/"$x"_R2.sai \
       combined/"$x"_R1.fq.gz \
       combined/"$x"_R2.fq.gz | \
