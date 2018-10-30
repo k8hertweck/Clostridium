@@ -30,7 +30,7 @@ cd $SCRIPTS
 cd references
 java -jar $TACC_PICARD_DIR/build/libs/picard.jar \
   CreateSequenceDictionary \
-  R=Cace-ATCC824-both.fas \
+  R=Cace-ATCC824-both.fasta \
   O=Cace-ATCC824-both.dict
 samtools faidx Cace-ATCC824-both.fasta
 cd $PROJECT
