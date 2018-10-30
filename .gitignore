@@ -2,5 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-references/*.fas.*
-mapping/
+references/*.fasta.*
+references/*.dict
+*.out
+
