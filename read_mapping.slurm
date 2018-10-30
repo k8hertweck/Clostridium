@@ -13,9 +13,9 @@
 ## read mapping of Clostridium strains
 ## usage: sbatch read_mapping.slurm PATH/TO/PROJECT
 ## dependencies
-# 	bwa (v0.7.16a): http://bio-bwa.sourceforge.net
-#   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard
-#   samtools (v1.5): http://www.htslib.org
+# 	bwa (v0.7.16a): http://bio-bwa.sourceforge.net (TACC installed)
+#   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard (TACC installed)
+#   samtools (v1.5): http://www.htslib.org (TACC installed)
 
 module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
 
