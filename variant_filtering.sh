@@ -11,7 +11,7 @@ GATK=$HOME/bin/gatk
 
 cd $SCRIPTS
 
-# identify heterozygotes from diploid analysis
+# select only heterozygotes from diploid analysis
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   VariantFiltration \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
@@ -20,35 +20,34 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   --genotype-filter-name "isHetFilter" \ # label heterozygous variants
   -O variants/het_diploid_marked.vcf
 # extract heterozygotes from diploid analysis
+grep "isHetFilter" variants/het_diploid_marked.vcf > variants/het_diploid_exclude.txt
+# extract header
+head -33 variants/het_diploid_marked.vcf > variants/header.txt
+# replace header
+cat variants/header.txt variants/het_diploid_exclude.txt > variants/het_diploid_exclude.vcf
+# exclude heterozygotes from diploid analysis
+java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+   SelectVariants \
+   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+   -V variants/Cace-variants_haploid.vcf.gz \
+   --exclude-ids variants/het_diploid_exclude.vcf
+   -O variants/haploid_unfiltered.vcf.gz  \
+
+   # exclude non-reference calls
+   # exclude sites with extremely high depths of coverage
+   # exclude variants in low-complexity regions
+
+## SNPs
+# extract just SNPs
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   SelectVariants \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -V variants/Cace-variants_diploid.vcf.gz \
-  -select "isHet == 1" \
-  -O variants/het_diploid_exclude.vcf
-# exclude heterozygotes from diploid analysis
-java -jar GenomeAnalysisTK.jar \
-   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-   -T SelectVariants \
-   --variant input.vcf \
-   -o output.vcf \
-   -excludeIDs fileExclude
-
-
-## SNPs
-# extract just SNPs from callset
-java -jar $GATK/gatk-package-4.0.8.1-local.jar \
-  VariantFiltration \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -V variants/XXX.vcf \
+  -V variants/haploid_unfiltered.vcf.gz \
   --select-type-to-include SNP
-# exclude heterozygotes from diploid analysis
+  -O variants/raw_snps.vcf.gz
 
-  # exclude variants within 6 bases of an indel
-  # exclude non-reference calls
-  # exclude sites with extremely high depths of coverage
-  # exclude variants in low-complexity regions
-  -O variants/filtered_test.vcf
+# exclude variants within 6 bases of an indel
+
 # transform filtered genotypes to no call
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   SelectVariants \
