@@ -56,12 +56,13 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   -O Cace-snps.vcf
 
 ## indels
-# exclude variants called as heterozygotes in diploid analysis
+# select only INDELS
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
-  VariantFiltration \
+  SelectVariants \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -V variants/raw_indels.vcf.gz \
+  -V variants/haploid_unfiltered.vcf.gz \
   --select-type-to-include INDEL
+  -O variants/raw_indels.vcf.gz
 # exclude non-reference calls
 
 # exclude sites with extremely high depths of coverage
