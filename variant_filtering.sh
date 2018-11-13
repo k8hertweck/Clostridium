@@ -63,3 +63,13 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   -V variants/haploid_unfiltered.vcf.gz \
   --select-type-to-include INDEL \
   -O variants/raw_indels.vcf.gz
+
+# separate by sample
+java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+  SelectVariants \
+  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+  -V variants/raw_snps.vcf.gz \
+  --sample-expressions "Cace-3003"
+  -O variants/test.vcf.gz
+
+# export to table
