@@ -9,7 +9,7 @@ PROJECT=$1
 SCRIPTS=`pwd`
 GATK=$HOME/bin/gatk
 
-cd $SCRIPTS
+cd $PROJECT
 
 # select only heterozygotes from diploid analysis
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
@@ -61,10 +61,5 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   SelectVariants \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
   -V variants/haploid_unfiltered.vcf.gz \
-  --select-type-to-include INDEL
+  --select-type-to-include INDEL \
   -O variants/raw_indels.vcf.gz
-# exclude non-reference calls
-
-# exclude sites with extremely high depths of coverage
-
-# exclude variants in low-complexity regions
