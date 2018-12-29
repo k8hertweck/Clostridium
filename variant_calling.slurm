@@ -58,6 +58,7 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   -I groups/Cace-824_S3_groups.bam \
   -O variants/Cace-variants_haploid.vcf.gz \
   -bamout variants/Cace-variants_haploid.bam \
+  -ERC GVCF \
   -mbq 15 \
   -ploidy 1
   # multi-sample variant calling, diploid (for false-positive filtering)
@@ -76,4 +77,5 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   -I groups/Cace-824_S3_groups.bam \
   -O variants/Cace-variants_diploid.vcf.gz \
   -bamout variants/Cace-variants_diploid.bam \
+  -ERC GVCF \
   -mbq 15
