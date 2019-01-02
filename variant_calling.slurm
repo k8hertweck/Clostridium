@@ -42,40 +42,26 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
 cd $PROJECT
 mkdir variants
 
-# multi-sample variant calling, haploid
-java -jar $GATK/gatk-package-4.0.8.1-local.jar \
-  HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -I groups/Cace-3003_S5_groups.bam \
-  -I groups/Cace-463_S1_groups.bam \
-  -I groups/Cace-7960_S6_groups.bam \
-  -I groups/Cace-7966_S7_groups.bam \
-  -I groups/Cace-7971_S8_groups.bam \
-  -I groups/Cace-7979_S9_groups.bam \
-  -I groups/Cace-7984_S10_groups.bam \
-  -I groups/Cace-8002_S11_groups.bam \
-  -I groups/Cace-8005_S12_groups.bam \
-  -I groups/Cace-824_S3_groups.bam \
-  -O variants/Cace-variants_haploid.vcf.gz \
-  -bamout variants/Cace-variants_haploid.bam \
-  -ERC GVCF \
-  -mbq 15 \
-  -ploidy 1
-  # multi-sample variant calling, diploid (for false-positive filtering)
-java -jar $GATK/gatk-package-4.0.8.1-local.jar \
-  HaplotypeCaller \
-  -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-  -I groups/Cace-3003_S5_groups.bam \
-  -I groups/Cace-463_S1_groups.bam \
-  -I groups/Cace-7960_S6_groups.bam \
-  -I groups/Cace-7966_S7_groups.bam \
-  -I groups/Cace-7971_S8_groups.bam \
-  -I groups/Cace-7979_S9_groups.bam \
-  -I groups/Cace-7984_S10_groups.bam \
-  -I groups/Cace-8002_S11_groups.bam \
-  -I groups/Cace-8005_S12_groups.bam \
-  -I groups/Cace-824_S3_groups.bam \
-  -O variants/Cace-variants_diploid.vcf.gz \
-  -bamout variants/Cace-variants_diploid.bam \
-  -ERC GVCF \
-  -mbq 15
+# variant calling on each sample individually
+for x in `cat $SCRIPTS/ClostridiumStrains.lst`
+  do
+    # haploid
+    java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+      HaplotypeCaller \
+      -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+      -I groups/"$x"_groups.bam \
+      -O variants/"$x"_variants_haploid.vcf.gz \
+      -bamout variants/"$x"_variants_haploid.bam \
+      -ERC GVCF \
+      -mbq 15 \
+      -ploidy 1
+    # diploid (for false-positive filtering)
+    java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+      HaplotypeCaller \
+      -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+      -I groups/"$x"_groups.bam \
+      -O variants/"$x"_variants_haploid.vcf.gz \
+      -bamout variants/"$x"_variants_haploid.bam \
+      -ERC GVCF \
+      -mbq 15
+done
