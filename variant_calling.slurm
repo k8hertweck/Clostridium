@@ -60,8 +60,33 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
       HaplotypeCaller \
       -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
       -I groups/"$x"_groups.bam \
-      -O variants/"$x"_variants_haploid.vcf.gz \
-      -bamout variants/"$x"_variants_haploid.bam \
+      -O variants/"$x"_variants_diploid.vcf.gz \
+      -bamout variants/"$x"_variants_diploid.bam \
       -ERC GVCF \
       -mbq 15
+done
+
+# merge files
+for x in haploid diploid
+  do
+    java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+      CombineGVCFs \
+      -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+      --variant variants/Cace-3003_S5_variants_"$x".vcf.gz \
+      --variant variants/Cace-463_S1_variants_"$x".vcf.gz \
+      --variant variants/Cace-7960_S6_variants_"$x".vcf.gz \
+      --variant variants/Cace-7966_S7_variants_"$x".vcf.gz \
+      --variant variants/Cace-7971_S8_variants_"$x".vcf.gz \
+      --variant variants/Cace-7979_S9_variants_"$x".vcf.gz \
+      --variant variants/Cace-7984_S10_variants_"$x".vcf.gz \
+      --variant variants/Cace-8002_S11_variants_"$x".vcf.gz \
+      --variant variants/Cace-8005_S12_variants_"$x".vcf.gz \
+      --variant variants/Cace-824_S3_variants_"$x".vcf.gz \
+      -O Cace_combined_variants_"$x".vcf.gz
+    # perform joint variant calling
+    java -jar $GATK/gatk-package-4.0.8.1-local.jar \
+      GenotypeGVCFs \
+      -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
+      -V Cace_combined_variants_"$x".vcf.gz \
+      -O Cace_raw_variants_"$x".vcf.gz
 done
