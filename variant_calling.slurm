@@ -82,11 +82,11 @@ for x in haploid diploid
       --variant variants/Cace-8002_S11_variants_"$x".vcf.gz \
       --variant variants/Cace-8005_S12_variants_"$x".vcf.gz \
       --variant variants/Cace-824_S3_variants_"$x".vcf.gz \
-      -O Cace_combined_variants_"$x".vcf.gz
+      -O variants/Cace_combined_variants_"$x".vcf.gz
     # perform joint variant calling
     java -jar $GATK/gatk-package-4.0.8.1-local.jar \
       GenotypeGVCFs \
       -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-      -V Cace_combined_variants_"$x".vcf.gz \
-      -O Cace_raw_variants_"$x".vcf.gz
+      -V variants/Cace_combined_variants_"$x".vcf.gz \
+      -O variants/Cace_raw_variants_"$x".vcf.gz
 done
