@@ -1,9 +1,19 @@
+#!/bin/bash
+
 # data summary
 
 # raw data
+cd raw
+for x in Cace*R1_001.fastq.gz
+  do
+    echo $x
+    zcat < $x | grep "@" | wc -l
+done
 
 # trimmed data
-
-# combined data (sanity check)
-
-# velvet summary
+cd combined
+for x in Cace*R1.fq.gz
+  do
+    echo $x
+    zcat < $x | grep "@" | wc -l
+done
