@@ -1,15 +1,26 @@
 #!/bin/bash
 
 ## annotating variants
-## usage: variant_calling.sh PATH/TO/PROJECT
+## usage: annotation.sh PATH/TO/DIRECTORY/WITH/VCFs
 ## dependencies
-#   GATK (v3.8.0): https://software.broadinstitute.org/gatk/
 #   snpEff (http://snpeff.sourceforge.net)
-#   SNAP https://www.hiv.lanl.gov/content/sequence/SNAP/SNAP.html
+
+# set path to snpEff
+SNPEFF=/Applications/snpEff_latest_core/snpEff/
+
+cd $ANALYSIS
 
 # identify effects of SNPs
-snpEff
-# reduce to single most damaging effect
-VariantAnnotator (gatk)
-# estimate synonymous and nonsynonymous nucleotide diversity
-SNAP on variants including low complexity
+for x in Cace-snps.vcf Cace-indels.vcf
+  do
+    sed s/NC_003030.1/Chromosome/ $x | sed s/NC_001988.2/megaplasmid/ > snpeff.$x
+done
+
+for x in snps indels
+  do
+    mkdir $x
+    cd $x
+    java -jar $SNPEFF/snpEff.jar Clostridium_acetobutylicum_atcc_824 ../snpeff.Cace-"$x".vcf > "$x"_annotations.vcf
+    java -jar $SNPEFF/snpEff.jar Clostridium_acetobutylicum_atcc_824 -csvStats $x.csv ../snpeff.Cace-"$x".vcf > "$x"_annotations.vcf
+    cd ..
+done
