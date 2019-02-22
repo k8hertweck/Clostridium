@@ -74,11 +74,6 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
 java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   VariantFiltration \
   -R $SCRIPTS/references/Cace-ATCC824-both.fasta \
-<<<<<<< HEAD
-  -V variants/raw_snps.vcf.gz \
-  --sample-expressions "Cace-3003"
-  -O variants/test.vcf.gz
-=======
   -V variants/Cace_raw_variants_diploid.vcf.gz \
   --genotype-filter-expression "isHet == 1" \
   --genotype-filter-name "isHetFilter" \
@@ -103,4 +98,3 @@ grep -v -f filtered/het_diploid_exclude.txt Cace-indels_filtered.vcf > Cace-inde
    # exclude non-reference calls
    # exclude variants in low-complexity regions
    # exclude variants within 6 bases of an indel
->>>>>>> ef928786042288447706158646898673bd51b900
