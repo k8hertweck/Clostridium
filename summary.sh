@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# data summary
+## summarization of data
+# usage: ./summary.sh PATH/TO/DATA
+
+DATA=~/data/Clostridium
 
 # raw data
 cd raw
