@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## applying quality filters for Clostridium strains
-## usage: variant_filtering.sh PATH/TO/PROJECT
+## usage: variant_filtering.sh PATH/TO/PROJECT (through interactive shell)
 ## dependencies
 #   GATK (v4.0.8.1): https://software.broadinstitute.org/gatk/ (must install and specify path below)
 
@@ -71,5 +71,3 @@ java -jar $GATK/gatk-package-4.0.8.1-local.jar \
   -V variants/raw_snps.vcf.gz \
   --sample-expressions "Cace-3003"
   -O variants/test.vcf.gz
-
-# export to table
