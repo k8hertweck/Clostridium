@@ -75,5 +75,5 @@ for x in `cat $SCRIPTS/ClostridiumStrains.lst`
       RGLB=lib1 \
       RGPL=illumina \
       RGPU=unit1 \
-      RGSM=20
+      RGSM="$x"
   done
