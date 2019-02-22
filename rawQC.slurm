@@ -37,9 +37,9 @@ mv *zip *html *gz raw
 
 ## quality trimming and filtering
 # make list of files
-#ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/ClostridiumFiles.lst
+ls raw/*.gz | sed s/_R[12]_001.fastq.gz// | sed s/raw.// | uniq > $SCRIPTS/ClostridiumFiles.lst
 # make list of strains
-#sed s/_S._L00[1234]// $SCRIPTS/ClostridiumFiles.lst > $SCRIPTS/ClostridiumStrains.lst
+sed s/_S._L00[1234]// $SCRIPTS/ClostridiumFiles.lst > $SCRIPTS/ClostridiumStrains.lst
 # set up directory
 mkdir trim
 # loop trimmomatic across all strains
