@@ -13,12 +13,11 @@
 ## variant calling for Clostridium strains
 ## usage: sbatch variant_calling.slurm PATH/TO/PROJECT
 ## dependencies
-# 	bwa (v0.7.16a): http://bio-bwa.sourceforge.net (TACC installed)
 #   Picard-tools (v2.11.0): http://broadinstitute.github.io/picard (TACC installed)
 #   samtools (v1.5): http://www.htslib.org (TACC installed)
 #   GATK (v4.0.8.1): https://software.broadinstitute.org/gatk/ (must install and specify path below)
 
-module load intel/17.0.4 bwa/0.7.16a picard/2.11.0 samtools/1.5
+module load intel/17.0.4 picard/2.11.0 samtools/1.5
 
 PROJECT=$1
 SCRIPTS=`pwd`
