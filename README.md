@@ -10,6 +10,7 @@ Scripts:
 * `annotation.sh`: identifying function and effects of variants with snpEff
 * `summary.sh`: assessing numbers of reads, etc for results summary
 * `assembly.sh`: selection of kmer value with VelvetOptimizer, genome assembly with Velvet
+* `Cace-16S.sh`: notes on building 16S phylogeny
 
 Output:
 * `raw/`: original `fq.gz` forward and reverse data files (multiple pairs per sample)
