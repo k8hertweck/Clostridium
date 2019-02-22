@@ -5,4 +5,4 @@
 references/*.fasta.*
 references/*.dict
 *.out
-
+.DS_Store
